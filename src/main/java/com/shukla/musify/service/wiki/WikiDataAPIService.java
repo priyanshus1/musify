@@ -1,31 +1,55 @@
 package com.shukla.musify.service.wiki;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shukla.musify.base.AMusifyRestTemplate;
 import com.shukla.musify.service.musicbrains.pojo.Relation;
 import com.shukla.musify.service.wiki.exception.MusicBrainInvalidWikiUrlException;
+import com.shukla.musify.service.wiki.exception.WikiDataInvalidResponseException;
 import com.shukla.musify.service.wiki.exception.WikiDataMissingWikiUrlException;
-import com.shukla.musify.service.wiki.pojo.WikiData;
-import com.shukla.musify.service.wiki.pojo.WikiDataResponse;
-import org.springframework.http.ResponseEntity;
+import com.shukla.musify.service.wiki.pojo.WikiDataEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class WikiDataAPIService extends AMusifyRestTemplate {
+public class WikiDataAPIService extends AMusifyRestTemplate<JsonNode> {
 
     private static final String VALIDATION_MATCH = "https://www\\.wikidata\\.org/wiki/[A-Za-z0-9_-]*$";
     private static final Pattern URL_VALIDATION_PATTERN = Pattern.compile(VALIDATION_MATCH);
     private static final String WIKI_DATA_API_URL = "https://www.wikidata.org/wiki/Special:EntityData/";
 
-    public WikiData fetchWikiData(Relation wikiData) throws MusicBrainInvalidWikiUrlException {
-        String resourceUrl = wikiData.getUrl().get("resource");
-        extractResourceIdOrThrow(resourceUrl);
-        return null;
+    private final ObjectMapper objectMapper;
+
+    @Autowired
+    public WikiDataAPIService(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
     }
 
-    private void extractResourceIdOrThrow(String resourceUrl) throws MusicBrainInvalidWikiUrlException {
+    public WikiDataEntity fetchWikiData(Relation wikiData) throws MusicBrainInvalidWikiUrlException {
+        String resourceUrl = wikiData.getUrl().get("resource");
+        String resourceId = extractResourceIdOrThrow(resourceUrl);
+        String fetchQuery = WIKI_DATA_API_URL + resourceId + ".json";
+        JsonNode response = this.getForEntity(fetchQuery, JsonNode.class);
+        return extractWikiDataEntity(response, resourceId);
+    }
+
+    private WikiDataEntity extractWikiDataEntity(JsonNode response, String resourceId) {
+        JsonNode entities = response.get("entities");
+        if (entities.isNull()) {
+            throw new WikiDataInvalidResponseException();
+        }
+        JsonNode resourceEntity = entities.get(resourceId);
+        if (resourceEntity.isNull()) {
+            throw new WikiDataInvalidResponseException();
+        }
+        return this.objectMapper.convertValue(resourceEntity, WikiDataEntity.class);
+
+    }
+
+    private String extractResourceIdOrThrow(String resourceUrl) throws MusicBrainInvalidWikiUrlException {
         if (resourceUrl == null) {
             throw new WikiDataMissingWikiUrlException();
         }
@@ -34,9 +58,8 @@ public class WikiDataAPIService extends AMusifyRestTemplate {
         if (!matcher.matches()) {
             throw new MusicBrainInvalidWikiUrlException();
         }
-        String lastSegment = resourceUrl.replaceAll(".*/", "");
-        String fetchQuery = WIKI_DATA_API_URL + lastSegment + ".json";
-        ResponseEntity<WikiDataResponse> response = this.restTemplate.getForEntity(fetchQuery, WikiDataResponse.class);
+        return resourceUrl.replaceAll(".*/", "");
+
 
     }
 }

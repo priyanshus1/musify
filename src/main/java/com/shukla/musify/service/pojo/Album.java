@@ -1,6 +1,5 @@
 package com.shukla.musify.service.pojo;
 
-import java.net.URL;
 import java.util.UUID;
 
 /*
@@ -14,9 +13,9 @@ public class Album {
 
     private final UUID id;
     private final String title;
-    private final URL imageUrl;
+    private final String imageUrl;
 
-    public Album(UUID id, String title, URL imageUrl) {
+    public Album(UUID id, String title, String imageUrl) {
         this.id = id;
         this.title = title;
         this.imageUrl = imageUrl;
@@ -30,7 +29,7 @@ public class Album {
         return this.title;
     }
 
-    public URL getImageUrl() {
+    public String getImageUrl() {
         return this.imageUrl;
     }
 }
