@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -28,7 +29,7 @@ public class ArtistRestController {
     }
 
     @GetMapping("/details/{mbid}")
-    public ArtistInfo getArtist(@PathVariable @NotNull @Valid UUID mbid) throws MusicBrainInvalidWikiUrlException {
+    public ArtistInfo getArtist(@PathVariable @NotNull @Valid UUID mbid) throws MusicBrainInvalidWikiUrlException, ExecutionException, InterruptedException {
         return this.artistInfoProviderService.getArtistInfo(mbid);
     }
 }
