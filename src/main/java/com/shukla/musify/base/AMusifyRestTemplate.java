@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import static com.shukla.musify.error.MusifyErrorCode.MUSIC_BRAINS_NO_RESPONSE;
-import static com.shukla.musify.error.MusifyErrorCode.MUSIC_BRAINS_UNEXPECTED_STATUS_CODE;
+import static com.shukla.musify.base.error.MusifyErrorCode.MUSIC_BRAINS_NO_RESPONSE;
+import static com.shukla.musify.base.error.MusifyErrorCode.MUSIC_BRAINS_UNEXPECTED_STATUS_CODE;
 
 public class AMusifyRestTemplate<T> {
     private final RestTemplate restTemplate;

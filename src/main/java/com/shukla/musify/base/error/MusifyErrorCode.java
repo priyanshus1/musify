@@ -1,4 +1,4 @@
-package com.shukla.musify.error;
+package com.shukla.musify.base.error;
 
 public enum MusifyErrorCode {
     MUSIC_BRAINS_UNEXPECTED_STATUS_CODE(001, "Musicbrains API returned unexpected http status code {0}", "Internal Server Error"),

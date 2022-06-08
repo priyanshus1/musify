@@ -21,7 +21,6 @@ public class CoverArtAPIService extends AMusifyRestTemplate<CoverArtAPIResponse>
         this.asyncTaskExecutor = asyncTaskExecutor;
     }
 
-
     @Cacheable(value = "albumCovers")
     public Future<String> fetchCoverArtASync(UUID mbid) {
         return this.asyncTaskExecutor.submit(() -> this.fetchCoverArtForSingleReleaseGroup(mbid));
