@@ -17,21 +17,9 @@ public class MusicBrainsAPIService extends AMusifyRestTemplate<MusicBrainsRespon
         super();
     }
 
-    public MusicBrainsResponse fetchArtistInfo(@NotNull UUID mbid) {
-        String fetchQuery = API_URL + mbid + URL_PARAM;
-        return this.getForEntity(fetchQuery, MusicBrainsResponse.class);
-    }
-
-//    private MusicBrainsResponse validateResponseOrThrow(ResponseEntity<MusicBrainsResponse> response) {
-//        if (response.getStatusCode() != HttpStatus.OK) {
-//            throw new MusicBrainsAPIUnexpectedStatusCodeException(MUSIC_BRAINS_UNEXPECTED_STATUS_CODE, response.getStatusCode());
-//        }
-//
-//        MusicBrainsResponse responseBody = response.getBody();
-//        if (responseBody == null) {
-//            throw new MusicBrainsAPINoResponseException(MUSIC_BRAINS_NO_RESPONSE);
-//        }
-//
-//        return responseBody;
-//    }
+//    @Cacheable(value = "musicBrainsResponses")
+public MusicBrainsResponse fetchArtistInfo(@NotNull UUID mbid) {
+    String fetchQuery = API_URL + mbid + URL_PARAM;
+    return this.getForEntity(fetchQuery, MusicBrainsResponse.class);
+}
 }
