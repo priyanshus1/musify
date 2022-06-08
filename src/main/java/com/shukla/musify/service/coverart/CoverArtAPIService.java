@@ -3,6 +3,7 @@ package com.shukla.musify.service.coverart;
 import com.shukla.musify.base.AMusifyRestTemplate;
 import com.shukla.musify.service.coverart.pojo.CoverArtAPIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class CoverArtAPIService extends AMusifyRestTemplate<CoverArtAPIResponse>
     }
 
 
+    @Cacheable(value = "albumCovers")
     public Future<String> fetchCoverArtASync(UUID mbid) {
         return this.asyncTaskExecutor.submit(() -> this.fetchCoverArtForSingleReleaseGroup(mbid));
     }

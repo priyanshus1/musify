@@ -2,6 +2,7 @@ package com.shukla.musify.service.musicbrains;
 
 import com.shukla.musify.base.AMusifyRestTemplate;
 import com.shukla.musify.service.musicbrains.pojo.MusicBrainsResponse;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
@@ -17,9 +18,9 @@ public class MusicBrainsAPIService extends AMusifyRestTemplate<MusicBrainsRespon
         super();
     }
 
-//    @Cacheable(value = "musicBrainsResponses")
-public MusicBrainsResponse fetchArtistInfo(@NotNull UUID mbid) {
-    String fetchQuery = API_URL + mbid + URL_PARAM;
-    return this.getForEntity(fetchQuery, MusicBrainsResponse.class);
-}
+    @Cacheable(value = "musicBrainResponses")
+    public MusicBrainsResponse fetchArtistInfo(@NotNull UUID mbid) {
+        String fetchQuery = API_URL + mbid + URL_PARAM;
+        return this.getForEntity(fetchQuery, MusicBrainsResponse.class);
+    }
 }

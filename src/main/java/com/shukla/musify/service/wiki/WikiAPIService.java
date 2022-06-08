@@ -6,6 +6,7 @@ import com.shukla.musify.service.wiki.exception.WikiDataMissingSiteLinkException
 import com.shukla.musify.service.wiki.pojo.WikiDataEntity;
 import com.shukla.musify.service.wiki.pojo.WikiSite;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class WikiAPIService {
         this.asyncTaskExecutor = asyncTaskExecutor;
     }
 
+    @Cacheable(value = "wikiDescriptions")
     public Future<String> getDescriptionAsync(Relation relation) throws MusicBrainInvalidWikiUrlException {
         return this.asyncTaskExecutor.submit(() -> {
             WikiDataEntity wikiDataResponse = this.wikiDataAPIService.fetchWikiData(relation);
