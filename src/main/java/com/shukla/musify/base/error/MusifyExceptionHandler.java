@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.UUID;
+
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @ControllerAdvice
@@ -20,20 +22,21 @@ public class MusifyExceptionHandler {
     @ResponseBody
     public final ResponseEntity<ErrorData> handleMusifyException(AMusifyBaseException exception) {
         ErrorData errorData = exception.getErrorData();
-        LOG.error(errorData.getErrorLogMessage(), exception);
+        logError(errorData.getErrorUuid(), exception);
         return getErrorDataResponseEntity(errorData);
     }
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseBody
     public final ResponseEntity<ErrorData> handleException(RuntimeException exception) {
-        logError(exception);
         ErrorData errorData = new ErrorData(MusifyErrorCode.INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR);
+        logError(errorData.getErrorUuid(), exception);
         return getErrorDataResponseEntity(errorData);
     }
 
-    private void logError(RuntimeException exception) {
-        LOG.error(exception.getMessage(), exception);
+    private void logError(UUID errorUuid, RuntimeException exception) {
+        String uuidPrefix = "[errorUuid - " + errorUuid.toString() + "]";
+        LOG.error(uuidPrefix, exception.getMessage(), exception);
     }
 
     private ResponseEntity<ErrorData> getErrorDataResponseEntity(ErrorData errorData) {
