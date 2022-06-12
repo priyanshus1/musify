@@ -13,6 +13,7 @@ import java.util.concurrent.Future;
 @Service
 public class CoverArtAPIService extends AMusifyRestTemplate<CoverArtAPIResponse> {
     private static final String COVER_ART_BASE_URL = "http://coverartarchive.org/release-group/";
+    public static final String COVER_ART = "CoverArt";
 
     private final AsyncTaskExecutor asyncTaskExecutor;
 
@@ -30,5 +31,10 @@ public class CoverArtAPIService extends AMusifyRestTemplate<CoverArtAPIResponse>
         String fetchQuery = COVER_ART_BASE_URL + mbid;
         CoverArtAPIResponse responseBody = this.getForEntity(fetchQuery, CoverArtAPIResponse.class);
         return responseBody.getImages().get(0).getImage();
+    }
+
+    @Override
+    protected String getServiceName() {
+        return COVER_ART;
     }
 }

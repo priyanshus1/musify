@@ -1,15 +1,13 @@
 package com.shukla.musify.base;
 
-import com.shukla.musify.service.musicbrains.MusicBrainsAPINoResponseException;
-import com.shukla.musify.service.musicbrains.exception.MusicBrainsAPIUnexpectedStatusCodeException;
+import com.shukla.musify.base.exception.MusifyNoResponseException;
+import com.shukla.musify.base.exception.MusifyUnexpectedHttpStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import static com.shukla.musify.base.error.MusifyErrorCode.MUSIC_BRAINS_NO_RESPONSE;
-import static com.shukla.musify.base.error.MusifyErrorCode.MUSIC_BRAINS_UNEXPECTED_STATUS_CODE;
 
-public class AMusifyRestTemplate<T> {
+public abstract class AMusifyRestTemplate<T> {
     private final RestTemplate restTemplate;
 
     protected AMusifyRestTemplate() {
@@ -23,13 +21,15 @@ public class AMusifyRestTemplate<T> {
 
     private T validateResponseOrThrow(ResponseEntity<T> response) {
         if (response.getStatusCode() != HttpStatus.OK) {
-            throw new MusicBrainsAPIUnexpectedStatusCodeException(MUSIC_BRAINS_UNEXPECTED_STATUS_CODE, response.getStatusCode());
+            throw new MusifyUnexpectedHttpStatusException(response.getStatusCode(), this.getServiceName());
         }
 
         T responseBody = response.getBody();
         if (responseBody == null) {
-            throw new MusicBrainsAPINoResponseException(MUSIC_BRAINS_NO_RESPONSE);
+            throw new MusifyNoResponseException(this.getServiceName());
         }
         return responseBody;
     }
+
+    protected abstract String getServiceName();
 }

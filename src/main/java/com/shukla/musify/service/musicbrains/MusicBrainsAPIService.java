@@ -13,9 +13,15 @@ public class MusicBrainsAPIService extends AMusifyRestTemplate<MusicBrainsRespon
 
     private static final String API_URL = "http://musicbrainz.org/ws/2/artist/";
     private static final String URL_PARAM = "?&fmt=json&inc=url-rels+release-groups";
+    public static final String MUSIC_BRAINZ = "MusicBrainz";
 
     public MusicBrainsAPIService() {
         super();
+    }
+
+    @Override
+    protected String getServiceName() {
+        return MUSIC_BRAINZ;
     }
 
     @Cacheable(value = "musicBrainResponses")

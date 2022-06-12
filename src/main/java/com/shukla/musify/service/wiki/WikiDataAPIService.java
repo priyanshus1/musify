@@ -20,6 +20,7 @@ public class WikiDataAPIService extends AMusifyRestTemplate<JsonNode> {
     private static final String VALIDATION_MATCH = "https://www\\.wikidata\\.org/wiki/[A-Za-z0-9_-]*$";
     private static final Pattern URL_VALIDATION_PATTERN = Pattern.compile(VALIDATION_MATCH);
     private static final String WIKI_DATA_API_URL = "https://www.wikidata.org/wiki/Special:EntityData/";
+    public static final String WIKI_DATA = "WikiData";
 
     private final ObjectMapper objectMapper;
 
@@ -61,5 +62,10 @@ public class WikiDataAPIService extends AMusifyRestTemplate<JsonNode> {
         return resourceUrl.replaceAll(".*/", "");
 
 
+    }
+
+    @Override
+    protected String getServiceName() {
+        return WIKI_DATA;
     }
 }

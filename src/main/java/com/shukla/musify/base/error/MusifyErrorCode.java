@@ -1,11 +1,15 @@
 package com.shukla.musify.base.error;
 
 public enum MusifyErrorCode {
-    MUSIC_BRAINS_UNEXPECTED_STATUS_CODE(001, "Musicbrains API returned unexpected http status code {0}", "Internal Server Error"),
-    MUSIC_BRAINS_NO_RESPONSE(002, "Musicbrians API returned empty response", "Internal Server Error");
+    INTERNAL_SERVER_ERROR(000, "Failed to process request due to:", "Internal Server Error"),
+    UNEXPECTED_STATUS_CODE(001, "{0} API returned unexpected http status code {1}", "Failed to retrieve data for this query"),
+    NO_RESPONSE(002, "{0} API returned empty response", "Failed to retrieve data for this query"),
+    ;
     private final int errorCode;
     private final String description;
     private final String externalMessage;
+
+    private static final String prefix = "MusifyErrorCode -";
 
     MusifyErrorCode(int errorCode, String description, String externalMessage) {
         this.errorCode = errorCode;
@@ -23,5 +27,9 @@ public enum MusifyErrorCode {
 
     public String getExternalMessage() {
         return this.externalMessage;
+    }
+
+    public String getPrefix() {
+        return MusifyErrorCode.prefix;
     }
 }
