@@ -1,0 +1,50 @@
+{
+	"info": {
+		"_postman_id": "c969a295-646e-4192-b667-8e038b67eb25",
+		"name": "musify",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "bsTest",
+			"item": [
+				{
+					"name": "musicbiz",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "artist",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-CorrelationId",
+						"value": "f27ec8db-af05-4f36-916e-3d57f91ecf5e",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/musify/music-artist/details/f27ec8db-af05-4f36-916e-3d57f91ecf5e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"musify",
+						"music-artist",
+						"details",
+						"f27ec8db-af05-4f36-916e-3d57f91ecf5e"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
