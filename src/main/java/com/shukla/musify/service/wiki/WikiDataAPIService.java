@@ -3,8 +3,8 @@ package com.shukla.musify.service.wiki;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shukla.musify.base.AMusifyRestTemplate;
+import com.shukla.musify.service.musicbrains.exception.MusicBrainInvalidWikiUrlException;
 import com.shukla.musify.service.musicbrains.pojo.Relation;
-import com.shukla.musify.service.wiki.exception.MusicBrainInvalidWikiUrlException;
 import com.shukla.musify.service.wiki.exception.WikiDataInvalidResponseException;
 import com.shukla.musify.service.wiki.exception.WikiDataMissingWikiUrlException;
 import com.shukla.musify.service.wiki.pojo.WikiDataEntity;
@@ -40,11 +40,11 @@ public class WikiDataAPIService extends AMusifyRestTemplate<JsonNode> {
     private WikiDataEntity extractWikiDataEntity(JsonNode response, String resourceId) {
         JsonNode entities = response.get("entities");
         if (entities.isNull()) {
-            throw new WikiDataInvalidResponseException();
+            throw new WikiDataInvalidResponseException(resourceId);
         }
         JsonNode resourceEntity = entities.get(resourceId);
         if (resourceEntity.isNull()) {
-            throw new WikiDataInvalidResponseException();
+            throw new WikiDataInvalidResponseException(resourceId);
         }
         return this.objectMapper.convertValue(resourceEntity, WikiDataEntity.class);
 
@@ -57,7 +57,7 @@ public class WikiDataAPIService extends AMusifyRestTemplate<JsonNode> {
 
         Matcher matcher = URL_VALIDATION_PATTERN.matcher(resourceUrl);
         if (!matcher.matches()) {
-            throw new MusicBrainInvalidWikiUrlException();
+            throw new MusicBrainInvalidWikiUrlException(resourceUrl);
         }
         return resourceUrl.replaceAll(".*/", "");
 

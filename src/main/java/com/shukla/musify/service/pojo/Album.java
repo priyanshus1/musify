@@ -13,14 +13,17 @@ import java.util.concurrent.Future;
 */
 public class Album {
 
-    private final UUID id;
-    private final String title;
-    private final Future<String> imageUrl;
+    private UUID id;
+    private String title;
+    private String imageUrl;
 
-    public Album(UUID id, String title, Future<String> imageUrl) {
+    private Album() {
+    }
+
+    public Album(UUID id, String title, Future<String> imageUrl) throws ExecutionException, InterruptedException {
         this.id = id;
         this.title = title;
-        this.imageUrl = imageUrl;
+        this.imageUrl = imageUrl.get();
     }
 
     public UUID getId() {
@@ -31,7 +34,7 @@ public class Album {
         return this.title;
     }
 
-    public String getImageUrl() throws ExecutionException, InterruptedException {
-        return this.imageUrl.get();
+    public String getImageUrl() {
+        return this.imageUrl;
     }
 }

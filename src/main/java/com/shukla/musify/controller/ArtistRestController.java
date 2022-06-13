@@ -1,8 +1,8 @@
 package com.shukla.musify.controller;
 
 import com.shukla.musify.service.ArtistInfoProviderService;
+import com.shukla.musify.service.musicbrains.exception.MusicBrainInvalidWikiUrlException;
 import com.shukla.musify.service.pojo.ArtistInfo;
-import com.shukla.musify.service.wiki.exception.MusicBrainInvalidWikiUrlException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

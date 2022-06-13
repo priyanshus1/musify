@@ -1,7 +1,7 @@
 package com.shukla.musify.service.wiki;
 
+import com.shukla.musify.service.musicbrains.exception.MusicBrainInvalidWikiUrlException;
 import com.shukla.musify.service.musicbrains.pojo.Relation;
-import com.shukla.musify.service.wiki.exception.MusicBrainInvalidWikiUrlException;
 import com.shukla.musify.service.wiki.exception.WikiDataMissingSiteLinkException;
 import com.shukla.musify.service.wiki.pojo.WikiDataEntity;
 import com.shukla.musify.service.wiki.pojo.WikiSite;

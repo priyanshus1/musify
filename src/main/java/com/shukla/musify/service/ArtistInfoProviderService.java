@@ -1,15 +1,15 @@
 package com.shukla.musify.service;
 
 import com.shukla.musify.service.coverart.CoverArtAPIService;
-import com.shukla.musify.service.exception.MusicBrainWikiRelationNotFoundException;
 import com.shukla.musify.service.musicbrains.MusicBrainsAPIService;
+import com.shukla.musify.service.musicbrains.exception.MusicBrainInvalidWikiUrlException;
+import com.shukla.musify.service.musicbrains.exception.MusicBrainWikiRelationNotFoundException;
 import com.shukla.musify.service.musicbrains.pojo.MusicBrainsResponse;
 import com.shukla.musify.service.musicbrains.pojo.Relation;
 import com.shukla.musify.service.musicbrains.pojo.ReleaseGroup;
 import com.shukla.musify.service.pojo.Album;
 import com.shukla.musify.service.pojo.ArtistInfo;
 import com.shukla.musify.service.wiki.WikiAPIService;
-import com.shukla.musify.service.wiki.exception.MusicBrainInvalidWikiUrlException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +60,13 @@ public class ArtistInfoProviderService {
 
     private List<Album> getAlbumsForReleaseGroups(List<ReleaseGroup> releaseGroups) {
         return releaseGroups.stream()
-                .map(e -> new Album(e.getId(), e.getTitle(), this.coverArtAPIService.fetchCoverArtASync(e.getId()))
+                .map(e -> {
+                            try {
+                                return new Album(e.getId(), e.getTitle(), this.coverArtAPIService.fetchCoverArtASync(e.getId()));
+                            } catch (InterruptedException | ExecutionException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        }
                 ).toList();
     }
 
