@@ -14,4 +14,4 @@ TODO:
 
 # Solution
 
-![Musify App System Design](./../doc_assets/musfy_system.drawio.svg)
+![Musify App System Design]('./../doc_assets/musfy_system.drawio.svg')
