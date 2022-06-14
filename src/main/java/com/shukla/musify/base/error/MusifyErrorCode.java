@@ -10,7 +10,9 @@ public enum MusifyErrorCode {
     INVALID_WIKI_URL_IN_RELATION_MUSIC_BRAIN(102, "Wiki relation in Music Brain Response contains an invalid url: {0}", "Cannot process this request"),
     INVALID_RESPONSE_FROM_WIKI_DATA(201, "Wiki data returned an invalid response for the resource: {0}", "Cannot process this request"),
     MISSING_WIKIPEDIA_URL_IN_WIKI_DATA_RESPONSE(202, "Wikipedia url missing from wiki data response", "Cannot process this request"),
-    WIKI_DATA_RESPONSE_MISSING_SITELINK(203, "Wiki data response does not contain site link entity", "Cannot process this request");
+    WIKI_DATA_RESPONSE_MISSING_SITELINK(203, "Wiki data response does not contain site link entity", "Cannot process this request"),
+    COVER_API_ASYNC_REQUESTS_FAILED(301, "Cover API requests with release group id {0} failed", "Cannot process this request");
+
     private final int errorCode;
     private final String description;
     private final String externalMessage;

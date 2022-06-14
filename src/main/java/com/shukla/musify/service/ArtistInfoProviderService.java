@@ -1,6 +1,7 @@
 package com.shukla.musify.service;
 
 import com.shukla.musify.service.coverart.CoverArtAPIService;
+import com.shukla.musify.service.exception.MusifyCoverAPIAsyncRequestsFailed;
 import com.shukla.musify.service.musicbrains.MusicBrainsAPIService;
 import com.shukla.musify.service.musicbrains.exception.MusicBrainInvalidWikiUrlException;
 import com.shukla.musify.service.musicbrains.exception.MusicBrainWikiRelationNotFoundException;
@@ -64,7 +65,7 @@ public class ArtistInfoProviderService {
                             try {
                                 return new Album(e.getId(), e.getTitle(), this.coverArtAPIService.fetchCoverArtASync(e.getId()));
                             } catch (InterruptedException | ExecutionException ex) {
-                                throw new RuntimeException(ex);
+                                throw new MusifyCoverAPIAsyncRequestsFailed(e.getId(), ex);
                             }
                         }
                 ).toList();
