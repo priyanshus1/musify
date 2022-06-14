@@ -1,0 +1,15 @@
+<configuration>
+    <appender name="Console"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date %-5level [%thread] - [%logger] [%mdc] - %msg%n</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <logger name="com.shukla" level="trace" additivity="false">
+        <appender-ref ref="Console"/>
+    </logger>
+
+
+</configuration>

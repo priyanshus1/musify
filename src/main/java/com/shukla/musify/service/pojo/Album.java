@@ -1,6 +1,8 @@
 package com.shukla.musify.service.pojo;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /*
 {
@@ -11,14 +13,17 @@ import java.util.UUID;
 */
 public class Album {
 
-    private final UUID id;
-    private final String title;
-    private final String imageUrl;
+    private UUID id;
+    private String title;
+    private String imageUrl;
 
-    public Album(UUID id, String title, String imageUrl) {
+    private Album() {
+    }
+
+    public Album(UUID id, String title, Future<String> imageUrl) throws ExecutionException, InterruptedException {
         this.id = id;
         this.title = title;
-        this.imageUrl = imageUrl;
+        this.imageUrl = imageUrl.get();
     }
 
     public UUID getId() {

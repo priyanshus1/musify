@@ -13,13 +13,10 @@ public class MusicBrainsResponse {
     private UUID id;
     private String name;
     private String country;
-
     private Gender gender;
-
     private String disambiguation;
     @JsonProperty("release-groups")
     private List<ReleaseGroup> releaseGroups = emptyList();
-
     private List<Relation> relations = emptyList();
 
     private MusicBrainsResponse() {
@@ -28,15 +25,12 @@ public class MusicBrainsResponse {
     public UUID getId() {
         return this.id;
     }
-
     public String getName() {
         return this.name;
     }
-
     public String getCountry() {
         return this.country;
     }
-
     public Gender getGender() {
         return this.gender;
     }
@@ -44,7 +38,6 @@ public class MusicBrainsResponse {
     public List<ReleaseGroup> getReleaseGroups() {
         return unmodifiableList(this.releaseGroups);
     }
-
 
     public List<Relation> getRelations() {
         return unmodifiableList(this.relations);

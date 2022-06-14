@@ -7,26 +7,6 @@ import java.util.UUID;
 
 import static java.util.Collections.unmodifiableList;
 
-/*
-{
-"mbid": "f27ec8db-af05-4f36-916e-3d57f91ecf5e",
-"name": "Michael Jackson",
-"gender": "Male",
-"country": "US",
-"disambiguation": "“King of Pop”",
-"description": "<p><b>Michael Joseph Jackson</b> (August 29, 1958 –
-June 25, 2009) was an American singer, songwriter, record producer,
-dancer, and actor. Called the King of Pop, his contributions to music,
-dance, and fashion along with his publicized personal life made him a
-global figure in popular culture for over four decades.</p>\n<p>The
-eighth ............. with $115 million in earnings.</p>\n<p></p>",
-"albums": [
-{
-"id": "500d9b05-68c3-3535-86e3-cf685869efc0",
-"title": "Farewell My Summer Love",
-"imageUrl": "http://coverartarchive.org/release/8172928a-a6c7-
-4d7c-83c8-5db2a4575094/13404444760.jpg"
- */
 public class ArtistInfo {
 
     private UUID mbid;
@@ -36,6 +16,9 @@ public class ArtistInfo {
     private String disambiguation;
     private String description;
     private List<Album> albums;
+
+    public ArtistInfo() {
+    }
 
     private ArtistInfo(UUID mbid, String name, Gender gender, String country, String disambiguation, String description, List<Album> albums) {
         this.mbid = mbid;

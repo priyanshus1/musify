@@ -1,8 +1,8 @@
 package com.shukla.musify.controller;
 
 import com.shukla.musify.service.ArtistInfoProviderService;
+import com.shukla.musify.service.musicbrains.exception.MusicBrainInvalidWikiUrlException;
 import com.shukla.musify.service.pojo.ArtistInfo;
-import com.shukla.musify.service.wiki.exception.MusicBrainInvalidWikiUrlException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -28,7 +29,7 @@ public class ArtistRestController {
     }
 
     @GetMapping("/details/{mbid}")
-    public ArtistInfo getArtist(@PathVariable @NotNull @Valid UUID mbid) throws MusicBrainInvalidWikiUrlException {
+    public ArtistInfo getArtist(@PathVariable @NotNull @Valid UUID mbid) throws MusicBrainInvalidWikiUrlException, ExecutionException, InterruptedException {
         return this.artistInfoProviderService.getArtistInfo(mbid);
     }
 }

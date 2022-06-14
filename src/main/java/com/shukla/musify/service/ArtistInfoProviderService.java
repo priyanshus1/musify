@@ -1,24 +1,25 @@
 package com.shukla.musify.service;
 
 import com.shukla.musify.service.coverart.CoverArtAPIService;
-import com.shukla.musify.service.exception.MusicBrainWikiRelationNotFoundException;
 import com.shukla.musify.service.musicbrains.MusicBrainsAPIService;
+import com.shukla.musify.service.musicbrains.exception.MusicBrainInvalidWikiUrlException;
+import com.shukla.musify.service.musicbrains.exception.MusicBrainWikiRelationNotFoundException;
 import com.shukla.musify.service.musicbrains.pojo.MusicBrainsResponse;
 import com.shukla.musify.service.musicbrains.pojo.Relation;
 import com.shukla.musify.service.musicbrains.pojo.ReleaseGroup;
 import com.shukla.musify.service.pojo.Album;
 import com.shukla.musify.service.pojo.ArtistInfo;
 import com.shukla.musify.service.wiki.WikiAPIService;
-import com.shukla.musify.service.wiki.exception.MusicBrainInvalidWikiUrlException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @Service
 public class ArtistInfoProviderService {
@@ -34,7 +35,7 @@ public class ArtistInfoProviderService {
         this.coverArtAPIService = coverArtAPIService;
     }
 
-    public ArtistInfo getArtistInfo(@Valid @NotNull UUID mbid) throws MusicBrainInvalidWikiUrlException {
+    public ArtistInfo getArtistInfo(@Valid @NotNull UUID mbid) throws MusicBrainInvalidWikiUrlException, ExecutionException, InterruptedException {
         MusicBrainsResponse musicBrainsResponse = this.musicBrainsAPIService.fetchArtistInfo(mbid);
         Relation wikidata = musicBrainsResponse
                 .getRelations()
@@ -43,12 +44,9 @@ public class ArtistInfoProviderService {
                 .findFirst()
                 .orElseThrow(MusicBrainWikiRelationNotFoundException::new);
 
-        String description = this.wikiAPIService.getDescription(wikidata);
+        Future<String> description = this.wikiAPIService.getDescriptionAsync(wikidata);
+        List<Album> mappedAlbum = getAlbumsForReleaseGroups(musicBrainsResponse.getReleaseGroups());
 
-        List<ReleaseGroup> releaseGroups = musicBrainsResponse.getReleaseGroups();
-        Map<UUID, String> imageUrlForMbid = this.coverArtAPIService.fetchCoverArtForReleaseGroups(releaseGroups);
-        List<Album> mappedAlbum = releaseGroups.stream()
-                .map(e -> new Album(e.getId(), e.getTitle(), imageUrlForMbid.get(e.getId()))).toList();
         return ArtistInfo.builder()
                 .mbid(mbid)
                 .name(musicBrainsResponse.getName())
@@ -56,8 +54,20 @@ public class ArtistInfoProviderService {
                 .gender(musicBrainsResponse.getGender())
                 .disambiguation(musicBrainsResponse.getDisambiguation())
                 .albums(mappedAlbum)
-                .description(description)
+                .description(description.get())
                 .build();
+    }
+
+    private List<Album> getAlbumsForReleaseGroups(List<ReleaseGroup> releaseGroups) {
+        return releaseGroups.stream()
+                .map(e -> {
+                            try {
+                                return new Album(e.getId(), e.getTitle(), this.coverArtAPIService.fetchCoverArtASync(e.getId()));
+                            } catch (InterruptedException | ExecutionException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        }
+                ).toList();
     }
 
 }
