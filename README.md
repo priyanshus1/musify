@@ -1,4 +1,4 @@
-# musify
+# MusicBrains Based Music Data Aggregator Service
 
 TODO:
 
@@ -11,3 +11,7 @@ TODO:
 6. But I think it was to for the assignment purpose so I did that
 7. Need to implement concept of correlation id : Done
 8. A note on Caching: Done and Caching as well
+
+# Solution
+
+![Musify App System Design](./../doc_assets/musfy_system.drawio.svg)
