@@ -16,6 +16,11 @@ public abstract class AMusifyBaseException extends RuntimeException {
         initCause(e);
     }
 
+    public AMusifyBaseException(MusifyErrorCode errorCode, HttpStatus httpStatus, Throwable e, String... placeHolders) {
+        this.errorData = new ErrorData(errorCode, httpStatus);
+        initCause(e);
+    }
+
     public ErrorData getErrorData() {
         return this.errorData;
     }

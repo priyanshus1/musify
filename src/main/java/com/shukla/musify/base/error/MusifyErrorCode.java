@@ -5,6 +5,7 @@ public enum MusifyErrorCode {
     UNEXPECTED_STATUS_CODE(001, "{0} API returned unexpected http status code {1}", "Failed to retrieve data for this query"),
     NO_RESPONSE(002, "{0} API returned empty response", "Failed to retrieve data for this query"),
     MISSING_WIKI_RELATION_IN_MUSIC_BRAINS_RESPONSE(100, "Wiki relation missing in Music Brain Response", "Cannot process this request"),
+    SERVICE_COMMUNICATION_EXCEPTION(003, "There was an error in communication with service {0} with http status {1}", "Cannot process this request"),
     MISSING_WIKI_URL_RELATION_MUSIC_BRAIN(101, "Wiki relation in Music Brain Response does not contain a url", "Cannot process this request"),
     INVALID_WIKI_URL_IN_RELATION_MUSIC_BRAIN(102, "Wiki relation in Music Brain Response contains an invalid url: {0}", "Cannot process this request"),
     INVALID_RESPONSE_FROM_WIKI_DATA(201, "Wiki data returned an invalid response for the resource: {0}", "Cannot process this request"),
